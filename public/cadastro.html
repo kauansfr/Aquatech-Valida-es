@@ -64,6 +64,10 @@
             <input id="nome_input" type="text" placeholder="Seu nome" />
           </div>
           <div class="campo">
+            <span>CPF:</span>
+            <input id="cpf_input" type="text" placeholder="Seu CPF" />
+          </div>
+          <div class="campo">
             <span>E-mail:</span>
             <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
           </div>
@@ -105,23 +109,37 @@
     //Recupere o valor da nova input pelo nome do id
     // Agora vá para o método fetch logo abaixo
     var nomeVar = nome_input.value;
+    var cpfVar = cpf_input.value;
     var emailVar = email_input.value;
     var senhaVar = senha_input.value;
     var confirmacaoSenhaVar = confirmacao_senha_input.value;
     var empresaVar = listaEmpresas.value
-    if (
-      nomeVar == "" ||
-      emailVar == "" ||
-      senhaVar == "" ||
-      confirmacaoSenhaVar == "" ||
-      empresaVar == ""
-    ) {
-      cardErro.style.display = "block";
+    
+    cardErro.style.display = "block";
+
+    // Validações com mensagem de erro
+    if (nomeVar.length < 1) {
+      
       mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
+        "(Nome deve conter pelo menos 1 caracter!)";
 
       finalizarAguardar();
       return false;
+    
+    } else if (cpf.length != 11) {
+      mensagem_erro.innerHTML =
+        "(O campo CPF deve conter apenas 11 números!)";
+
+      finalizarAguardar();
+      return false;
+    
+    } else if (email.indexOf('@') == false) {
+      mensagem_erro.innerHTML =
+        "(O campo email deve conter o @)";
+
+      finalizarAguardar();
+      return false;
+
     } else {
       setInterval(sumirMensagem, 5000);
     }
@@ -136,9 +154,11 @@
         // crie um atributo que recebe o valor recuperado aqui
         // Agora vá para o arquivo routes/usuario.js
         nomeServer: nomeVar,
+        cpfServer: cpfVar,
         emailServer: emailVar,
         senhaServer: senhaVar,
-        empresaServer: empresaVar
+        confirmacaoSenhaServer: confirmacaoSenhaVar,
+        empresaServer: empresaVar,
       }),
     })
       .then(function (resposta) {
